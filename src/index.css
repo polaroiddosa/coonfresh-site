@@ -1,0 +1,277 @@
+@import "tailwindcss";
+
+/* Self-hosted fonts (no external CDN) - files in public/fonts/,
+   downloaded once from Google Fonts and served locally.
+   Fraunces (headings, 2026-10 design-system revamp) + Open Sans (body). */
+@font-face {
+  font-family: "Open Sans";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("/fonts/open-sans.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Fraunces";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("/fonts/fraunces.woff2") format("woff2");
+}
+
+/*
+ * Coonfresh design tokens.
+ * Palette is the site's original one: brand blue #2ea3f2, brand peach #dca47d,
+ * ink #333, body #666, footer #1a1a1a. Everything else below is a tint or a
+ * darker shade of those same hues, added only so text passes WCAG contrast:
+ *   - blue-deep   darker brand blue, for text and white-on-blue surfaces
+ *   - peach-deep  darker brand peach, for peach-hue text and focus on peach
+ *   - cream/sand  light tints of brand peach, used as page and panel surfaces
+ */
+@theme {
+  --font-heading: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-body: "Open Sans", Arial, sans-serif;
+
+  --color-brand-blue: #2ea3f2;
+  --color-brand-blue-deep: #0a5f8f;
+  --color-brand-peach: #dca47d;
+  --color-brand-peach-deep: #8a5a35;
+  --color-ink: #333333;
+  --color-body: #666666;
+  --color-dark: #1a1a1a;
+  --color-cream: #fbf5ee;
+  --color-sand: #f5e6d8;
+  --color-line: #858585;
+
+  --radius-card: 1.75rem;
+  --radius-panel: 2.5rem;
+
+  --shadow-card: 0 1px 2px rgb(138 90 53 / 0.08), 0 18px 36px -18px rgb(138 90 53 / 0.35);
+  --shadow-float: 0 2px 4px rgb(138 90 53 / 0.1), 0 28px 56px -24px rgb(138 90 53 / 0.5);
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+html {
+  scroll-padding-top: 6rem;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--color-body);
+  background-color: var(--color-cream);
+}
+
+h1,
+h2,
+h3,
+h4,
+.font-heading {
+  font-family: var(--font-heading);
+  font-optical-sizing: auto;
+}
+
+@layer base {
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+    color: var(--color-ink);
+  }
+}
+
+::selection {
+  background: var(--color-brand-peach);
+  color: var(--color-ink);
+}
+
+/* Focus is always visible; deep blue passes 3:1 on cream, white and sand. */
+:focus-visible {
+  outline: 3px solid var(--color-brand-blue-deep);
+  outline-offset: 3px;
+  border-radius: 0.5rem;
+}
+
+.on-dark :focus-visible,
+.on-deep :focus-visible {
+  outline-color: #ffffff;
+}
+
+html {
+  scrollbar-color: var(--color-brand-peach) var(--color-sand);
+}
+
+/* ---------- Components ---------- */
+
+.card {
+  background: #ffffff;
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+}
+
+.panel {
+  border-radius: var(--radius-panel);
+}
+
+/* Buttons: pill, 48px tall, label never wraps, press feedback. */
+.btn {
+  display: inline-flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  padding: 0.75rem 1.75rem;
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  cursor: pointer;
+  transition:
+    background-color 150ms var(--ease-out),
+    box-shadow 150ms var(--ease-out),
+    transform 120ms var(--ease-out);
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn-primary {
+  background: var(--color-brand-peach);
+  color: var(--color-ink);
+  box-shadow: 0 10px 22px -10px rgb(138 90 53 / 0.7);
+}
+
+.btn-primary:hover {
+  background: #e4b190;
+  box-shadow: 0 14px 26px -10px rgb(138 90 53 / 0.75);
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-ghost {
+  background: #ffffff;
+  color: var(--color-brand-blue-deep);
+  box-shadow: inset 0 0 0 2px var(--color-brand-blue-deep);
+}
+
+.btn-ghost:hover {
+  background: var(--color-sand);
+}
+
+.link-arrow {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 700;
+  color: var(--color-brand-blue-deep);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+  text-decoration-color: transparent;
+  transition: text-decoration-color 150ms var(--ease-out);
+}
+
+.link-arrow:hover {
+  text-decoration-color: currentColor;
+}
+
+/* Form fields: label above, 3:1 border, 16px text so iOS never zooms. */
+.field {
+  width: 100%;
+  min-height: 3rem;
+  border-radius: 1rem;
+  border: 1.5px solid var(--color-line);
+  background: #ffffff;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  color: var(--color-ink);
+  transition: border-color 150ms var(--ease-out);
+}
+
+.field:hover {
+  border-color: var(--color-ink);
+}
+
+.field:focus-visible {
+  border-color: var(--color-brand-blue-deep);
+  outline-offset: 2px;
+}
+
+/* ---------- Blog post body ---------- */
+
+.post-content {
+  font-size: 1.0625rem;
+  max-width: 68ch;
+}
+
+.post-content p {
+  margin-bottom: 1.25em;
+}
+
+.post-content a {
+  color: var(--color-brand-blue-deep);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.post-content h2,
+.post-content h3 {
+  font-family: var(--font-heading);
+  margin-top: 1.75em;
+  margin-bottom: 0.5em;
+  color: var(--color-ink);
+}
+
+.post-content ul,
+.post-content ol {
+  margin-bottom: 1.25em;
+  padding-left: 1.5em;
+}
+
+.post-content ul {
+  list-style: disc;
+}
+
+.post-content ol {
+  list-style: decimal;
+}
+
+.post-content li {
+  margin-bottom: 0.5em;
+}
+
+.post-content img,
+.post-content iframe,
+.post-content video {
+  max-width: 100%;
+  height: auto;
+  border-radius: 1.25rem;
+}
+
+.post-content iframe {
+  aspect-ratio: 16 / 9;
+  width: 100%;
+}
+
+/* ---------- Motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
